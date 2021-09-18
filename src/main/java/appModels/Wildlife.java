@@ -5,8 +5,9 @@ public abstract class Wildlife {
     private String animalName;
     private String type;
 
-    public Wildlife(String animalName,String type,String young) {
-        this.type =type;
+    public Wildlife(String animalName, String type, String young){
+        this.type = type;
         this.animalName = animalName;
     }
+
 }
