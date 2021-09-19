@@ -39,7 +39,7 @@ public class sql2oAnimalDAO implements AnimalDAO{
                     .throwOnMappingFailure(false)
                     .executeAndFetch(Animal.class);
         }catch (Sql2oException ex){
-            System.out.println(ex);
+            System.out.println("ex");
             return null;
         }
     }
