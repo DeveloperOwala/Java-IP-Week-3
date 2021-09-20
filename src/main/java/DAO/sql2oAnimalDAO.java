@@ -18,10 +18,11 @@ public class sql2oAnimalDAO implements AnimalDAO{
         this.sql2o = sql2o;
     }
 
-    public void addAnimalName(String animalName) {
+    public void addAnimalName(Animal animal) {
+        String sql = "INSERT INTO animals(name, age,health) VALUES(:name, :age, :health)";
         try (Connection con = sql2o.open()) {
-            String sql = "INSERT INTO animals(animalName, type) VALUES(:animalName, 'animal')";
-            Wildlife.id = (int) con.createQuery(sql, true)
+            int id = (int) con.createQuery(sql, true)
+                    .bind(animal)
                     .addParameter("animalName", animalName)
                     .throwOnMappingFailure(false)
                     .executeUpdate()

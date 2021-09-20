@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface AnimalDAO {
     List<Animal> getAllAnimals();
+    void add(Animal animal);
 }
