@@ -25,12 +25,12 @@ public class App {
         EndangeredDAO endangeredDAO = new EndangeredDAO(sql2o);
         WildlifeDAO wildlifeDAO = new WildlifeDAO(sql2o);
 
-
+//
         Map<String, Object> model = new HashMap<>();
-
-        String young = null;
-        Wildlife animal = new Endangered ("hippo", "endangered","ill","young", young);
-        System.out.println(animal.getAnimalName());
+//
+//        String young = null;
+//        Wildlife animal = new Endangered ("hippo", "endangered","ill","young", young);
+//        System.out.println(animal.getAnimalName());
 
 
 

@@ -1,5 +1,5 @@
 ### **AUTHOR**
-### Brian Muthaka****
+### Erick Okumu****
 
 ### **Description**
 
@@ -19,13 +19,13 @@ animals available in the wild.
 ### **Contribution**
 * You can fork the repo and add your extra feature to the web app.
 Click on the following link:
-https://github.com/MUTHAKABRIAN/wildlife_tracker2.git
+https://github.com/DeveloperOwala/Java-IP-Week-3.git
 
-  If you have any Questions please reach out to me via `muthakabrian@gmail.com` 
+  If you have any Questions please reach out to me via `otienoerick46@gmail.com` 
 
 ## License and copyright  
  
- Copyright (c) 2021 [Brian Muthaka]
+ Copyright (c) 2021 [Erick Okumu]
  
  
 Permission is hereby granted, free of charge, to any person obtaining a copy
