@@ -18,15 +18,14 @@ public class sql2oAnimalDAO implements AnimalDAO{
         this.sql2o = sql2o;
     }
 
-    public void addAnimalName(Animal animal) {
+    public void add(Animal animal) {
         String sql = "INSERT INTO animals(name, age,health) VALUES(:name, :age, :health)";
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql, true)
                     .bind(animal)
-                    .addParameter("animalName", animalName)
-                    .throwOnMappingFailure(false)
                     .executeUpdate()
                     .getKey();
+            animal.setId(id);
         }catch (Sql2oException ex){
             System.out.println(ex);
         }
