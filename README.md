@@ -13,7 +13,7 @@ animals available in the wild.
 ### **in psql:**
 
 * CREATE DATABASE wildlife_tracker;
-* CREATE TABLE animals (id serial PRIMARY KEY, animalName varchar ,type varchar ,age varchar, health varchar);
+* CREATE TABLE animals (id serial PRIMARY KEY, name varchar ,type varchar ,age varchar, health varchar);
 * CREATE TABLE sightings (id serial PRIMARY KEY, location varchar, rangerName varchar, wildlifeId int );
 
 ### **Contribution**
