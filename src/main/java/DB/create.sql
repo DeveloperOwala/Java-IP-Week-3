@@ -2,7 +2,7 @@ SET MODE Postgresql;
 
 CREATE DATABASE to_do;
 
-\c to_do;
+\c wildlife_tracker;
 
 CREATE  TABLE IF NOT EXISTS animals
 id SERIAL PRIMARY KEY,

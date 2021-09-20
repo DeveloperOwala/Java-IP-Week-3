@@ -31,8 +31,6 @@ public class WildlifeDAO implements sql2oWildlife {
     }
 
 
-
-
     @Override
     public List<Wildlife> getAllWildlife(){
         String sql = "SELECT * FROM animals";

@@ -6,6 +6,7 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
+
 import java.util.List;
 
 public class sql2oAnimalDAO implements AnimalDAO{
@@ -26,8 +27,7 @@ public class sql2oAnimalDAO implements AnimalDAO{
                     .executeUpdate()
                     .getKey();
         }catch (Sql2oException ex){
-            System.out.println("ex");
-
+            System.out.println(ex);
         }
     }
 
@@ -39,7 +39,7 @@ public class sql2oAnimalDAO implements AnimalDAO{
                     .throwOnMappingFailure(false)
                     .executeAndFetch(Animal.class);
         }catch (Sql2oException ex){
-            System.out.println("ex");
+            System.out.println(ex);
             return null;
         }
     }
