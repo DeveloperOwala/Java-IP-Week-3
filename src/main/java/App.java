@@ -18,7 +18,8 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println("TESTING PASSED");
-
+        String connectionString = "jdbc:h2:~/wildlife.db;INIT=RUNSCRIPT from 'classpath:DB/create.sql'";
+        Sql2o sql2o = new Sql2o(connectionString, "", "");
         sql2oAnimalDAO sql2oAnimalDAO = new sql2oAnimalDAO (sql2o);
 //        SightingsDAO sightingsDAO = new SightingsDAO(sql2o);
         EndangeredDAO endangeredDAO = new EndangeredDAO(sql2o);
