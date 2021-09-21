@@ -1,80 +1,133 @@
-import DAO.EndangeredDAO;
-import DAO.WildlifeDAO;
-import DAO.sql2oAnimalDAO;
-import models.Endangered;
-import models.Sightings;
-import models.Wildlife;
-import org.sql2o.Sql2o;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static spark.Spark.*;
 
+/**
+ * Authored by @erickokumu
+ **
+ */
 public class App {
 
+    // I hope you know this method is used when deploying to server :Heroku
 
-    public static void main(String[] args) {
-        System.out.println("TESTING PASSED");
-        String connectionString = "jdbc:h2:~/wildlife.db;INIT=RUNSCRIPT from 'classpath:DB/create.sql'";
-        Sql2o sql2o = new Sql2o(connectionString, "", "");
-        sql2oAnimalDAO sql2oAnimalDAO = new sql2oAnimalDAO (sql2o);
-//        SightingsDAO sightingsDAO = new SightingsDAO(sql2o);
-        EndangeredDAO endangeredDAO = new EndangeredDAO(sql2o);
-        WildlifeDAO wildlifeDAO = new WildlifeDAO(sql2o);
-
-//
-        Map<String, Object> model = new HashMap<>();
-//
-//        String young = null;
-//        Wildlife animal = new Endangered ("hippo", "endangered","ill","young", young);
-//        System.out.println(animal.getAnimalName());
+    public static void main(String[] args) { //type “psvm + tab” to autocreate this
+        // directing the server to immediate files it should access. Just like index
+        staticFileLocation("/public");
 
 
-
+        // routes as per their handlebars templates. Make sure to read and understand what they do
         get("/", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
             return new ModelAndView(model, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
+        get("/animalnew", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "animalForm.hbs");
+        }, new HandlebarsTemplateEngine());
 
-        get("/add-wildlife", (request, response) -> {
+        get("/endangerednew", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            return modelAndView(model,"endangeredForm.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/sightingsnew", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            return modelAndView(model,"sightingsForm.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/animals", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            List peter = Endangered.relative_All();
+            System.out.println(peter.get(0));
+            model.put("endangered", peter);
+            return modelAndView(model, "endangered.hbs");
+        }, new HandlebarsTemplateEngine());
+
+
+        get("/sightings", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            return modelAndView(model, "sightings.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("/saved", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            List sightings = Sightings.retrieveFromSightings();
+            model.put("sightings", sightings);
+            return new ModelAndView(model,"sight.hbs");
+        }, new HandlebarsTemplateEngine());
+
+
+        get("/newanimal", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            List animal = Animal.relative_All();
+            model.put("animals", animal);
             return new ModelAndView(model, "wildlife.hbs");
         }, new HandlebarsTemplateEngine());
 
+        get("/animals/:id/edit", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("animal", Animal.find(Integer.parseInt(request.params(":id"))));
+            return new ModelAndView(model, "editForm.hbs");
+        }, new HandlebarsTemplateEngine());
 
-        post("/add-wildlife", (request, response) -> {
-            int animalId = Integer.parseInt(request.queryParams("animalId"));
-            String location = request.queryParams("location");
-            String name = request.queryParams("name");
-            String ranger = request.queryParams("ranger");
-            String age = request.queryParams("age");
-            String health = request.queryParams("health");
-            if (age == null && health == null) {
-                sql2oAnimalDAO.addAnimalName(name);
-            } else {
-                endangeredDAO.addAnimalName(name);
-                endangeredDAO.saveHealthOfAnimal(health);
-                endangeredDAO.saveAgeOfAnimal(age);
-            }
-            Sightings sightings = new Sightings(location, ranger, animalId);
-//            sightingsDAO.addSightings(sightings);
-            response.redirect("/all-animals");
+
+        get("/animals/:id/delete", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            Animal.find(Integer.parseInt(request.params(":id"))).delete();
+            response.redirect("/animals");
             return null;
         }, new HandlebarsTemplateEngine());
 
-        get("/all-animals", (request, response) -> {
-            model.put("animals", endangeredDAO.getAllEndangeredAnimals());
-            model.put("common",sql2oAnimalDAO.getAllAnimals());
 
-            return new ModelAndView(model, "allAnimals.hbs");
+        post("/animals/:id/edit", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            int id = Integer.parseInt(request.params(":id"));
+            String name = request.queryParams("name");
+            Animal animal = Animal.find(id);
+            animal.setName(name);
+            animal.update();
+            return new ModelAndView(model, "ess.hbs");
         }, new HandlebarsTemplateEngine());
 
-        get("/sightings", (request, response) -> {
-//            model.put("sight", sightingsDAO.getAllSightings());
-            return new ModelAndView(model, "sightings.hbs");
+
+        post("/succ", (req, res) -> { //new
+            Map<String, Object> model = new HashMap<>();
+            String animalname = req.queryParams("animalname");
+            String rangername = req.queryParams("ranger");
+            String location = req.queryParams("location");
+            Sightings sightings = new Sightings(animalname,rangername,location);
+            sightings.save();
+            model.put("sightings", sightings);
+            return modelAndView(model, "succ.hbs");
+        }, new HandlebarsTemplateEngine());
+
+
+
+        //post methods
+        post("/success", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            String name = req.queryParams("name");
+            String health = req.queryParams("health");
+            String age = req.queryParams("age");
+            Endangered endangered = new Endangered(name, health, age);
+            endangered.save();
+            System.out.println("Please enter all input fields.");
+            return new ModelAndView(model,"success.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        post("/wildlife", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            String name = req.queryParams("name");
+            Animal animal = new Animal(name);
+            animal.save();
+            return new ModelAndView(model,"ess.hbs");
         }, new HandlebarsTemplateEngine());
     }
 
-}
+    }
